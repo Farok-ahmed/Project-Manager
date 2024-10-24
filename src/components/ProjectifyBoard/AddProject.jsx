@@ -41,7 +41,7 @@ const AddProject = ({ onClose, editTask }) => {
   return (
     <>
       <div className="p-4 bg-gray-900 h-full w-full absolute top-0 left-0 z-10 bg-opacity-70"></div>
-      <div className="w-full max-w-md rounded-lg bg-gray-800 z-10 shadow-xl absolute top-1/4 max-sm:left-[20%] md:left-[40%] ">
+      <div className="w-full max-w-md rounded-lg bg-gray-800 z-10 shadow-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
         <div className="p-6">
           <h2 className="mb-6 text-2xl font-bold text-green-400">
             Create Task
