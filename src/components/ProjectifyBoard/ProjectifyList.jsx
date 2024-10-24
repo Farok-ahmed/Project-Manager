@@ -4,35 +4,59 @@ import { FilterSvg } from "../SvgIcon/SvgIcon";
 import ProjectCard from "./ProjectCard";
 
 const ProjectifyList = ({ onEdit, search }) => {
-  const [sortedTasks, setSortedTasks] = useState("asc");
+  // state for each category sorting
+  const [sortedToDo, setSortedToDo] = useState("asc");
+  const [sortedOnProgress, setSortedOnProgress] = useState("asc");
+  const [sortedDone, setSortedDone] = useState("asc");
+  const [sortedRevise, setSortedRevise] = useState("asc");
+
   const state = useContext(TasksContext);
 
-  // toggle sort
-  const toggleSort = () => {
-    setSortedTasks((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
-  };
   // filter the tasks
   const filteredTasks = state.filter((task) => {
     return task.taskName.toLowerCase().includes(search.toLowerCase());
   });
 
-  // sort the tasks by date
+  // Toggle sort functions for each category
+  const toggleSortToDo = () => {
+    setSortedToDo((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+  const toggleSortOnProgress = () => {
+    setSortedOnProgress((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+  const toggleSortDone = () => {
+    setSortedDone((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+  const toggleSortRevise = () => {
+    setSortedRevise((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
 
-  const sortedOrder = filteredTasks.sort((a, b) => {
-    if (sortedTasks === "asc") {
-      return new Date(a.date) - new Date(b.date);
-    } else {
-      return new Date(b.date) - new Date(a.date);
-    }
-  });
+  // Sort functions for each category
+  const sortTasks = (tasks, sortOrder) => {
+    return tasks.sort((a, b) => {
+      if (sortOrder === "asc") {
+        return new Date(a.date) - new Date(b.date);
+      } else {
+        return new Date(b.date) - new Date(a.date);
+      }
+    });
+  };
 
-  const todoCategory = sortedOrder.filter((task) => task.category === "To-Do");
-  const onProgressCategory = sortedOrder.filter(
-    (task) => task.category === "On Progress"
+  const todoCategory = sortTasks(
+    filteredTasks.filter((task) => task.category === "To-Do"),
+    sortedToDo
   );
-  const doneCategory = sortedOrder.filter((task) => task.category === "Done");
-  const reviseCategory = sortedOrder.filter(
-    (task) => task.category === "Revise"
+  const onProgressCategory = sortTasks(
+    filteredTasks.filter((task) => task.category === "On Progress"),
+    sortedOnProgress
+  );
+  const doneCategory = sortTasks(
+    filteredTasks.filter((task) => task.category === "Done"),
+    sortedDone
+  );
+  const reviseCategory = sortTasks(
+    filteredTasks.filter((task) => task.category === "Revise"),
+    sortedRevise
   );
 
   return (
@@ -44,12 +68,11 @@ const ProjectifyList = ({ onEdit, search }) => {
               <h3 className="text-lg font-semibold">
                 To-Do ({todoCategory.length})
               </h3>
-              <button onClick={toggleSort}>
+              <button onClick={toggleSortToDo}>
                 <FilterSvg />
               </button>
             </div>
             <div>
-              {/* todo empty or has */}
               {todoCategory.length > 0 ? (
                 todoCategory.map((task) => (
                   <ProjectCard key={task.id} task={task} onEdit={onEdit} />
@@ -67,7 +90,7 @@ const ProjectifyList = ({ onEdit, search }) => {
               <h3 className="text-lg font-semibold">
                 On Progress ({onProgressCategory.length})
               </h3>
-              <button onClick={toggleSort}>
+              <button onClick={toggleSortOnProgress}>
                 <FilterSvg />
               </button>
             </div>
@@ -87,9 +110,10 @@ const ProjectifyList = ({ onEdit, search }) => {
               <h3 className="text-lg font-semibold">
                 Done ({doneCategory.length})
               </h3>
-              <FilterSvg />
+              <button onClick={toggleSortDone}>
+                <FilterSvg />
+              </button>
             </div>
-
             <div>
               {doneCategory.length > 0 ? (
                 doneCategory.map((task) => (
@@ -108,7 +132,9 @@ const ProjectifyList = ({ onEdit, search }) => {
               <h3 className="text-lg font-semibold">
                 Revise ({reviseCategory.length})
               </h3>
-              <FilterSvg />
+              <button onClick={toggleSortRevise}>
+                <FilterSvg />
+              </button>
             </div>
             {reviseCategory.length > 0 ? (
               reviseCategory.map((task) => (
