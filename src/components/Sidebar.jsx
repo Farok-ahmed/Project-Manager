@@ -1,4 +1,4 @@
-import lwsLogo from "../assets/lws-logo-en.svg";
+
 const Sidebar = () => {
   return (
     <>
@@ -8,9 +8,7 @@ const Sidebar = () => {
             <h1>Project Manager</h1>
           </div>
         </div>
-        <button className="mb-8 w-full rounded-md bg-green-500 py-2 text-white">
-          + New Project
-        </button>
+       
         <nav>
           <ul className="space-y-4">
             <li>
